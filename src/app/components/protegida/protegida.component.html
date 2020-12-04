@@ -1,19 +1,25 @@
-<div class="container">
+<div *ngIf="auth.user$ | async as user" class="container">
     <div class="card mx-auto mt-4" style="width: 18rem;">
         <img *ngIf="auth.user$ | async as user" [src]="user.picture" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 *ngIf="auth.user$ | async as user" class="card-title">{{user.name}}</h5>
             <p class="card-text">Una persona muy Handsome Encontramos Aquí.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+
 
         </div>
     </div>
 
     <div class="input-group flex-nowrap mt-4">
         <div class="input-group-prepend">
-            <span class="input-group-text" id="addon-wrapping">@</span>
+            <span class="input-group-text" id="addon-wrapping">Destinatario</span>
         </div>
-        <input type="text" name="mensaje" [(ngModel)]="mensaje" class="form-control" placeholder="Mensaje..." aria-label="Username" aria-describedby="addon-wrapping">
+        <input type="text" name="mensaje" [(ngModel)]="mensaje.data.recipient" class="form-control" placeholder="Nombre del destinatario" aria-label="Username" aria-describedby="addon-wrapping">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="addon-wrapping">Cantidad</span>
+        </div>
+        <input type="number" name="mensaje" [(ngModel)]="mensaje.data.quantity" class="form-control" placeholder="cantidad" aria-label="Username" aria-describedby="addon-wrapping">
+
 
         <button type="button" class="btn btn-success" (click)="onSubmit()">Enviar</button>
     </div>

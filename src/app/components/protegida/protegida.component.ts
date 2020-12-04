@@ -12,17 +12,32 @@ import { AuthMessageService } from 'src/app/services/auth.service';
 
 export class ProtegidaComponent implements OnInit {
 
-  data:any;
-  mensaje:any
+  data:any = [];
+  cont:number = 0;
+  mensaje = {
+    index:'',
+    timestamp:'',
+      data: {
+        sender:'',
+        recipient:'',
+        quantity:0
+      },
+    precedingHash: '""',
+    hash: '',
+    nonce: 0
+  }
+
   constructor(public auth: AuthService,
               private router:Router,
               private authMessageService:AuthMessageService
                ) { }
 
   // mensaje:any = [];
-  
+
   ngOnInit() {
-    this.auth.user$.subscribe(perfil => {})
+    this.auth.user$.subscribe(perfil => {
+      this.mensaje.data.sender = perfil.name
+    })
     this.getAllData();
     this.resetForm();
 
@@ -31,11 +46,12 @@ export class ProtegidaComponent implements OnInit {
   resetForm(form?: NgForm) {
     if(form)
       form.reset();
-    
+
   }
 
-  onSubmit(form: NgForm){
-    this.authMessageService.infoPost(form).subscribe(res => {
+  onSubmit(){
+    this.authMessageService.infoPost(this.mensaje).subscribe(res => {
+      this.getAllData()
       console.log(res);
 
     })
@@ -43,9 +59,28 @@ export class ProtegidaComponent implements OnInit {
 
   getAllData() {
     this.authMessageService.getInfo().subscribe((res:any) => {
-      console.warn(res);
-      this.data = res;    
-      
+      // console.warn(res);
+      //PARCHE
+      let contador = 0
+      for(let i of res){
+        for(let j of i.blockchain){
+          this.cont++;
+          if(this.cont % 2 == 0) {
+            this.data.push({
+              index: contador++,
+              hash:j.hash,
+              precedingHash: j.precedingHash,
+              nonce: j.nonce,
+              data: j.index.data
+            });
+            // console.log(j.hash) //hash
+            // console.log(j.precedingHash) //precedingHash
+            // console.log(j.nonce) //nonce
+            // console.log(j.index.data) //hash
+          }
+
+        }
+      }
     });
 
   }
