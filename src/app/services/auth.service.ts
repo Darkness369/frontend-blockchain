@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
 })
 export class AuthMessageService {
 
-  private URL = 'https://seguridad-blockchain.herokuapp.com/api';
-  
+  private URL = 'https://blockchainn.herokuapp.com/api';
+
   selectDatos: any;
   Datos: any[];
 
